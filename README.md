@@ -45,3 +45,82 @@ Dedicated test suites for each phase (Task 1–5)
 
 ⚙️ Clean Architecture
 Kafka → Service Layer → JPA → Incentive API → REST Output
+
+--
+
+## 🛠️ Technologies Used
+
+Java 17
+
+Spring Boot 3
+
+Spring Web
+
+Spring Data JPA
+
+Spring Kafka
+
+H2 Database
+
+Testcontainers (Kafka)
+
+Maven
+
+--
+
+## 🧪 Tasks Overview (As per Forage JPMorgan Chase Program)
+
+Task 1 – Setup environment, add dependencies, run TaskOneTests
+
+Task 2 – Implement Kafka Listener & capture initial transaction values
+
+Task 3 – Integrate JPA + H2, validate transactions, store records
+
+Task 4 – Connect Incentive API & update recipient incentives
+
+Task 5 – Expose /balance REST endpoint & run final tests
+
+--
+
+## 📂 Project Modules
+
+src/
+ ├── controller/        → Balance API
+ ├── consumer/          → Kafka Listener
+ ├── entity/            → User + TransactionRecord
+ ├── service/           → Validation + Incentive Logic
+ ├── repository/        → JPA Repositories
+ └── MidasApplication   → Main Spring Boot Runner
+
+
+--
+
+## ⚡ How It Works
+
+1️⃣ Transaction Received
+
+Kafka → KafkaTransactionListener
+
+2️⃣ Transaction Validated
+
+Check:
+
+sender exists
+
+recipient exists
+
+sender has enough balance
+
+3️⃣ Incentive Retrieved
+
+REST POST → http://localhost:8080/incentive
+
+4️⃣ Transaction Saved
+
+Stored in H2 using JPA
+
+5️⃣ Balance Updated
+
+Balances adjusted + incentive added to recipient
+
+6️⃣ Balance Query
