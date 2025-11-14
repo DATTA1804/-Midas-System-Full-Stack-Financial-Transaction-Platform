@@ -85,6 +85,7 @@ Task 5 – Expose /balance REST endpoint & run final tests
 ## 📂 Project Modules
 
 src/
+
  ├── controller/        → Balance API
  
  ├── consumer/          → Kafka Listener
