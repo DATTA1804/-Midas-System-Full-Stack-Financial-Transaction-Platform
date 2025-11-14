@@ -86,10 +86,15 @@ Task 5 – Expose /balance REST endpoint & run final tests
 
 src/
  ├── controller/        → Balance API
+ 
  ├── consumer/          → Kafka Listener
+ 
  ├── entity/            → User + TransactionRecord
+ 
  ├── service/           → Validation + Incentive Logic
+ 
  ├── repository/        → JPA Repositories
+ 
  └── MidasApplication   → Main Spring Boot Runner
 
 
