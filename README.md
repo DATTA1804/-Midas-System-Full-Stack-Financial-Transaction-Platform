@@ -125,4 +125,13 @@ Balances adjusted + incentive added to recipient
 
 6️⃣ Balance Query
 
+GET /balance?userId=<id>
+
+---
+
+🎯 Conclusion
+
+The Midas System is a complete demonstration of a modern event-driven backend, combining Kafka messaging, database persistence, external API integration, and REST services into one cohesive, production-style system.
+It’s an excellent project for mastering Spring Boot, microservices, and backend architecture through hands-on learning.
+
 ---
