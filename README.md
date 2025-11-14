@@ -46,7 +46,7 @@ Dedicated test suites for each phase (Task 1–5)
 ⚙️ Clean Architecture
 Kafka → Service Layer → JPA → Incentive API → REST Output
 
---
+---
 
 ## 🛠️ Technologies Used
 
@@ -66,7 +66,7 @@ Testcontainers (Kafka)
 
 Maven
 
---
+---
 
 ## 🧪 Tasks Overview (As per Forage JPMorgan Chase Program)
 
@@ -80,7 +80,7 @@ Task 4 – Connect Incentive API & update recipient incentives
 
 Task 5 – Expose /balance REST endpoint & run final tests
 
---
+---
 
 ## 📂 Project Modules
 
@@ -93,7 +93,7 @@ src/
  └── MidasApplication   → Main Spring Boot Runner
 
 
---
+---
 
 ## ⚡ How It Works
 
@@ -124,3 +124,5 @@ Stored in H2 using JPA
 Balances adjusted + incentive added to recipient
 
 6️⃣ Balance Query
+
+---
