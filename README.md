@@ -1,143 +1,105 @@
 # 💰 Midas System – Full-Stack Financial Transaction Platform
 
-Midas is a high-performance, event-driven financial transaction processing system built using Spring Boot, Kafka, H2 Database, and REST APIs.
-It handles real-time transactions, validates them, updates balances, fetches incentives, and exposes user balance APIs — all in one robust backend service.
+
+MIDAS is a high-performance, event-driven financial transaction platform built with Java 25, Spring Boot, Kafka, and React. It processes financial transactions in real-time, integrating with a rewards/incentive system and providing a modern fintech interface.
 
 ---
 
-## 🧠 About the Project
+🏗 Architecture
 
-This project simulates a real-world financial backend, showcasing production-grade concepts like:
+```text
+  ┌─────────────────┐      ┌──────────────┐      ┌───────────────┐
+  │   Modern React  │◄────►│  Midas Core  │◄────►│   H2 / SQL    │
+  │     Frontend    │      │ (Spring Boot)│      │   Database    │
+  └─────────────────┘      └──────┬───────┘      └───────────────┘
+                                  │
+                                  ▼
+                          ┌──────────────┐      ┌───────────────┐
+                          │    Kafka     │─────►│ Incentive API │
+                          │   (Broker)   │      │   (Internal)  │
+                          └──────────────┘      └───────────────┘
+```
 
-Event-driven communication with Kafka
+### Data Flow
+1. **Frontend** initiates balance lookups or monitors transactions.
+2. **Kafka** receives transaction events from external traders (simulated in tests).
+3. **Midas Core** consumes Kafka events, validates users and balances.
+4. **Incentive API** is called for valid transactions to determine rewards.
+5. **Database** persists the `TransactionRecord` and updates `User` balances.
 
-Transaction validation and persistence using JPA + H2
+## 🚀 Local Setup
 
-External Incentive API integration
+### Prerequisites
+- Java 21+ (Java 25 recommended)
+- Maven 3.9+
+- Node.js 20+
+- Kafka Broker (running on localhost:9092)
 
-REST API for live user balance lookup
+### Backend
+1. Build and install:
+   ```bash
+   mvn clean install
+   ```
+2. Run the application:
+   ```bash
+   mvn spring-boot:run
+   ```
 
-Fully automated test-driven workflow (Task 1 to Task 5)
+### Incentive API
+```bash
+java -jar services/transaction-incentive-api.jar
+```
 
-Perfect for backend developers learning Spring Boot, microservices communication, and distributed system design.
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
----
+## 🐳 Docker Execution
 
-## 🚀 Features
+Deploy the entire stack with one command:
+```bash
+docker-compose up --build
+```
+- Frontend: `http://localhost`
+- Backend: `http://localhost:33400`
+- Incentive API: `http://localhost:8080`
 
-📥 Kafka Listener
-Receives and deserializes incoming transaction messages
+## ☁️ Cloud Deployment Plan
 
-✔️ Transaction Validation
-Validates sender, recipient, and available balance
+### 1. Infrastructure (AWS Example)
+- **Compute**: Amazon ECS with Fargate for stateless backend and frontend containers.
+- **Database**: Amazon RDS for PostgreSQL (replacing H2) for persistence.
+- **Messaging**: Amazon MSK (Managed Streaming for Kafka).
+- **Frontend Hosting**: S3 Bucket + CloudFront CDN for static asset delivery.
 
-💾 H2 Database Integration
-Stores users, transactions, and incentive data using Spring Data JPA
+### 2. Scalability & Resilience
+- **Horizontal Scaling**: Backend services scale based on CPU/Memory usage.
+- **Kafka Strategy**: Multiple partitions per topic to allow parallel consumption by multiple Midas Core instances.
+- **Secrets**: Use AWS Secrets Manager for DB credentials and API keys.
 
-🔗 Incentive Service Integration
-Calls external /incentive API and updates recipient balance
+## 📡 API Usage
 
-📊 Balance REST Endpoint
-/balance?userId= returns real-time balance for any user
+### Get Balance
+**URL**: `/balance`
+**Method**: `GET`
+**Params**: `userId` (Long)
+**Response**:
+```json
+{
+  "amount": 1200.23
+}
+```
 
-🧪 Comprehensive Testing
-Dedicated test suites for each phase (Task 1–5)
+## 🧠 Design Decisions
+- **Transactional Safety**: Used `@Transactional` in `DatabaseConduit` to ensure atomicity between user balance updates and transaction record persistence.
+- **User Validation**: Silent discard of invalid transactions (as per requirement) ensures system stability under erroneous inputs.
+- **Modern UI**: Implemented with glassmorphism and a "Dark Mode" aesthetic using vanilla CSS and Lucide icons for a premium fintech feel.
 
-⚙️ Clean Architecture
-Kafka → Service Layer → JPA → Incentive API → REST Output
+## ✅ Quality Bar
+- **Java 25** ready.
+- Clean Architecture (Foundation, Entity, Component, Repository splits).
+- Multi-stage Docker optimization for lean production images.
 
----
-
-## 🛠️ Technologies Used
-
-Java 17
-
-Spring Boot 3
-
-Spring Web
-
-Spring Data JPA
-
-Spring Kafka
-
-H2 Database
-
-Testcontainers (Kafka)
-
-Maven
-
----
-
-## 🧪 Tasks Overview (As per Forage JPMorgan Chase Program)
-
-Task 1 – Setup environment, add dependencies, run TaskOneTests
-
-Task 2 – Implement Kafka Listener & capture initial transaction values
-
-Task 3 – Integrate JPA + H2, validate transactions, store records
-
-Task 4 – Connect Incentive API & update recipient incentives
-
-Task 5 – Expose /balance REST endpoint & run final tests
-
----
-
-## 📂 Project Modules
-
-src/
-
- ├── controller/        → Balance API
- 
- ├── consumer/          → Kafka Listener
- 
- ├── entity/            → User + TransactionRecord
- 
- ├── service/           → Validation + Incentive Logic
- 
- ├── repository/        → JPA Repositories
- 
- └── MidasApplication   → Main Spring Boot Runner
-
-
----
-
-## ⚡ How It Works
-
-1️⃣ Transaction Received
-
-Kafka → KafkaTransactionListener
-
-2️⃣ Transaction Validated
-
-Check:
-
-sender exists
-
-recipient exists
-
-sender has enough balance
-
-3️⃣ Incentive Retrieved
-
-REST POST → http://localhost:8080/incentive
-
-4️⃣ Transaction Saved
-
-Stored in H2 using JPA
-
-5️⃣ Balance Updated
-
-Balances adjusted + incentive added to recipient
-
-6️⃣ Balance Query
-
-GET /balance?userId=<id>
-
----
-
-🎯 Conclusion
-
-The Midas System is a complete demonstration of a modern event-driven backend, combining Kafka messaging, database persistence, external API integration, and REST services into one cohesive, production-style system.
-It’s an excellent project for mastering Spring Boot, microservices, and backend architecture through hands-on learning.
-
----
